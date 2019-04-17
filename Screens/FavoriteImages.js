@@ -1,5 +1,17 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  ScrollView,
+  Alert,
+  TouchableOpacity,
+  View
+} from 'react-native'
+import { connect } from 'react-redux'
+import { OneImage, CleanFavoriteImages } from '../actions'
+import Header from '../components/Header'
+const styles = require('../components/SearchResults/SearchResultsStyles')
 
 class FavoriteImages extends React.Component {
   static navigationOptions = {
@@ -13,13 +25,93 @@ class FavoriteImages extends React.Component {
     }
   }
 
+  constructor(props) {
+    super(props)
+    this.setState({ item: null })
+
+    this.render_item = this.render_item.bind(this)
+    this._keyExtractor = this._keyExtractor.bind(this)
+    this.cleanFavorites = this.cleanFavorites.bind(this)
+  }
+
+  cleanFavorites() {
+    Alert.alert(
+      `Do you want to vote clean your favorites ?`,
+      '',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            this.props.CleanFavoriteImages()
+          }
+        },
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        }
+      ],
+      { cancelable: false }
+    )
+  }
+
+  _keyExtractor = item => item.id
+
+  render_item = ({ item }) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          this.props.OneImage(item)
+          this.props.navigation.navigate('OneImage')
+        }}
+      >
+        <Image
+          style={{
+            margin: 2,
+            width: Dimensions.get('window').width / 3 - 5,
+            height: Dimensions.get('window').width / 3 - 5
+          }}
+          source={{
+            uri: `${item.previewURL}`
+          }}
+        />
+      </TouchableOpacity>
+    )
+  }
+
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Favorites!</Text>
+      <View>
+        <Header
+          navigation={this.props.navigation}
+          onPress={() => {
+            this.cleanFavorites()
+          }}
+          iconName={'trash'}
+        />
+        <ScrollView style={styles.searchResultsContainer}>
+          <FlatList
+            numColumns={3}
+            style={{ width: Dimensions.get('window').width - 5 }}
+            data={this.props.favorites}
+            keyExtractor={this._keyExtractor}
+            renderItem={this.render_item}
+          />
+        </ScrollView>
       </View>
     )
   }
 }
 
-export default FavoriteImages
+function mapStateToProps(state) {
+  return {
+    // results: state.results,
+    item: state.item,
+    favorites: state.favorites
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  { OneImage, CleanFavoriteImages }
+)(FavoriteImages)

@@ -11,5 +11,9 @@ module.exports = StyleSheet.create({
     flexWrap: 'wrap',
     // flex: 1,
     flexDirection: 'row'
+  },
+  pictureWithInfo: {
+    margin: 10,
+    backgroundColor: 'lightblue'
   }
 })

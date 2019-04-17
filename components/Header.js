@@ -34,11 +34,8 @@ export default class Header extends React.Component {
     return (
       <View style={styles.header}>
         <Text style={styles.headerText}>Images Browser</Text>
-        <TouchableOpacity
-          style={styles.textSearchButton}
-          onPress={() => this.props.navigation.navigate('FavoriteImages')}
-        >
-          <FontAwesome name="heart" size={16} color="#000" />
+        <TouchableOpacity style={styles.textSearchButton} onPress={this.props.onPress}>
+          <FontAwesome name={this.props.iconName} size={16} color="#000" />
         </TouchableOpacity>
       </View>
     )
