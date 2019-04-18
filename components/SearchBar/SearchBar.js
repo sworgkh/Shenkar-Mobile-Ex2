@@ -3,7 +3,7 @@ import { TextInput, TouchableOpacity, View } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import API_KEY from '../../API/pixabay'
 import { connect } from 'react-redux'
-import { searchResults } from '../../actions'
+import { searchResults, RenderLoading } from '../../actions'
 
 const styles = require('./SearchBarStyles')
 
@@ -16,6 +16,8 @@ class SearchBar extends Component {
   }
 
   searchOnMedium = () => {
+      console.log('first')
+    this.props.RenderLoading(true)
     const URL =
       'https://pixabay.com/api/?key=' + API_KEY.pixabay_key + '&q=' + this.state.searchTerm
     console.log(URL)
@@ -27,6 +29,7 @@ class SearchBar extends Component {
       .catch(error => {
         console.error(error)
       })
+      this.props.RenderLoading(false)
   }
 
   render() {
@@ -49,5 +52,5 @@ class SearchBar extends Component {
 
 export default connect(
   null,
-  { searchResults }
+  { searchResults, RenderLoading }
 )(SearchBar)

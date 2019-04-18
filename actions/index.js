@@ -24,3 +24,21 @@ export function FavoriteImages(favorites) {
     favorites
   }
 }
+
+export const CLEAN_FAVORITE_IMAGES = 'CLEAN_FAVORITE_IMAGES'
+
+export function CleanFavoriteImages(favorites) {
+  return {
+    type: CLEAN_FAVORITE_IMAGES,
+    favorites
+  }
+}
+
+export const LOADING = 'LOADING'
+
+export function RenderLoading(loading) {
+  return {
+    type: LOADING,
+    loading
+  }
+}

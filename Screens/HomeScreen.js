@@ -9,7 +9,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    margin: 3
   }
 })
 
@@ -28,7 +29,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedIndex: 0
+      selectedIndex: 0,
+      icon: 'heart'
     }
   }
 
@@ -42,9 +44,13 @@ export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header navigation={this.props.navigation} />
+        <Header
+          navigation={this.props.navigation}
+          onPress={() => this.props.navigation.navigate('FavoriteImages')}
+          iconName={this.state.icon}
+        />
         <SegmentedControlTab
-          styles={{ width: Dimensions.get('window').width - 20 }}
+          // styles={{ width: Dimensions.get('window').width - 100 }}
           values={['Grid', 'List']}
           selectedIndex={this.state.selectedIndex}
           onTabPress={this.handleIndexChange}
@@ -52,7 +58,7 @@ export default class App extends React.Component {
         <View style={{ margin: '1%' }}>
           <SearchBar />
         </View>
-        <SearchResults navigation={this.props.navigation} />
+        <SearchResults gridOrList={this.state.selectedIndex} navigation={this.props.navigation} />
       </View>
     )
   }

@@ -34,9 +34,24 @@ class OneImage extends React.Component {
     this.state = {
       item: null,
       icon_style: 'heart-o',
-      is_favorite: false
+      is_favorite: false,
+      menuIcon: 'heart'
     }
     this.eliminateHeart = this.eliminateHeart.bind(this)
+  }
+
+  componentWillMount() {
+    if (this.props.favorites.includes(this.props.item)) {
+      this.setState({
+        is_favorite: true,
+        icon_style: 'heart-o'
+      })
+    } else {
+      this.setState({
+        is_favorite: false,
+        icon_style: 'heart-o'
+      })
+    }
   }
 
   componentDidMount() {
@@ -52,10 +67,15 @@ class OneImage extends React.Component {
         is_favorite: true,
         icon_style: 'heart-o'
       })
+    } else {
+      this.setState({
+        is_favorite: false,
+        icon_style: 'heart-o'
+      })
     }
   }
 
-  eliminateHeart(){
+  eliminateHeart() {
     this.setState({
       is_favorite: true
     })
@@ -72,7 +92,11 @@ class OneImage extends React.Component {
     if (this.state.is_favorite) {
       return (
         <View style={styles.container}>
-          <Header navigation={this.props.navigation} />
+          <Header
+            navigation={this.props.navigation}
+            onPress={() => this.props.navigation.navigate('FavoriteImages')}
+            iconName={this.state.menuIcon}
+          />
           <Image
             style={{
               margin: 2,
@@ -94,7 +118,11 @@ class OneImage extends React.Component {
     }
     return (
       <View style={styles.container}>
-        <Header navigation={this.props.navigation} />
+        <Header
+          navigation={this.props.navigation}
+          onPress={() => this.props.navigation.navigate('FavoriteImages')}
+          iconName={this.state.menuIcon}
+        />
         <Image
           style={{
             margin: 2,
