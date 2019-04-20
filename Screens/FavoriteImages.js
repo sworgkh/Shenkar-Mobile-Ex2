@@ -6,12 +6,14 @@ import {
   ScrollView,
   Alert,
   TouchableOpacity,
-  View
+  View,
+  AsyncStorage
 } from 'react-native'
 import { connect } from 'react-redux'
-import { OneImage, CleanFavoriteImages } from '../actions'
+import { LoadFromStorage, OneImage, CleanFavoriteImages, addFavorites } from '../actions'
 import Header from '../components/Header'
 const styles = require('../components/SearchResults/SearchResultsStyles')
+// import { AsyncStorageModuleM } from '../components/AsyncStorageModule'
 
 class FavoriteImages extends React.Component {
   static navigationOptions = {
@@ -27,12 +29,32 @@ class FavoriteImages extends React.Component {
 
   constructor(props) {
     super(props)
-    this.setState({ item: null })
+    this.state = {
+      item: null,
+      favorites_loaded: []
+    }
 
     this.render_item = this.render_item.bind(this)
     this._keyExtractor = this._keyExtractor.bind(this)
     this.cleanFavorites = this.cleanFavorites.bind(this)
   }
+
+  // componentDidMount(): void {
+  //   //   console.log('load from storage')
+  //   //   AsyncStorage.getAllKeys().then(keys =>
+  //   //     AsyncStorage.multiGet(keys).then(result => {
+  //   //       result.map(req =>
+  //   //         req.forEach(element => {
+  //   //           const candidate = JSON.parse(element)
+  //   //           console.log(candidate)
+  //   //           if (candidate.id && !this.props.favorites.includes(candidate)) {
+  //   //             this.props.addFavorites(candidate)
+  //   //           }
+  //   //         })
+  //   //       )
+  //   //     })
+  //   //   )
+  //   // }
 
   cleanFavorites() {
     Alert.alert(
@@ -42,6 +64,21 @@ class FavoriteImages extends React.Component {
         {
           text: 'Yes',
           onPress: () => {
+            AsyncStorage.getAllKeys().then(keys =>
+              AsyncStorage.multiGet(keys).then(result => {
+                result.map(req =>
+                  req.forEach(element => {
+                    try {
+                      AsyncStorage.removeItem(element)
+                    } catch (error) {
+                      // Error retrieving data
+                      console.log(error.message)
+                    }
+                  })
+                )
+              })
+            )
+
             this.props.CleanFavoriteImages()
           }
         },
@@ -113,5 +150,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { OneImage, CleanFavoriteImages }
+  { OneImage, CleanFavoriteImages, LoadFromStorage, addFavorites }
 )(FavoriteImages)
