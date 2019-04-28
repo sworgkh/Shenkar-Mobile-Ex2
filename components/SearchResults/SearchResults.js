@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   View,
   Text,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native'
 import { connect } from 'react-redux'
-import { OneImage, RenderLoading } from '../../actions'
+import { OneImage, RenderLoading, addFavorites } from '../../actions'
 const styles = require('./SearchResultsStyles')
 
 class SearchResults extends Component {
@@ -23,9 +23,6 @@ class SearchResults extends Component {
     this._keyExtractor = this._keyExtractor.bind(this)
   }
 
-  componentDidMount() {
-    //   console.log('second')
-  }
 
   _keyExtractor = item => item.id
 
@@ -145,12 +142,12 @@ function mapStateToProps(state) {
   return {
     results: state.results,
     item: state.item,
-    loading: state.loading
-    // favorites: state.favorites
+    loading: state.loading,
+    favorites: state.favorites
   }
 }
 
 export default connect(
   mapStateToProps,
-  { OneImage, RenderLoading }
+  { OneImage, RenderLoading, addFavorites }
 )(SearchResults)

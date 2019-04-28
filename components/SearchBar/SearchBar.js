@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { TextInput, TouchableOpacity, View } from 'react-native'
+import { AsyncStorage, TextInput, TouchableOpacity, View } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import API_KEY from '../../API/pixabay'
 import { connect } from 'react-redux'
-import { searchResults, RenderLoading } from '../../actions'
+import { searchResults, RenderLoading, addFavorites } from '../../actions'
 
 const styles = require('./SearchBarStyles')
 
@@ -13,10 +13,40 @@ class SearchBar extends Component {
     this.state = {
       searchTerm: ''
     }
+    this.removeLoading = this.removeLoading.bind(this)
+  }
+
+  componentDidMount(): void {
+    console.log('load from storage')
+    AsyncStorage.getAllKeys().then(keys =>
+      AsyncStorage.multiGet(keys).then(result => {
+        result.map(req =>
+          req.forEach(element => {
+            const candidate = JSON.parse(element)
+            console.log(candidate)
+            if (candidate.id) {
+              if (!this.props.favorites) {
+                this.props.addFavorites(candidate)
+                return
+              }
+              let load = true
+              for (let i = 0; i < this.props.favorites.length; i++) {
+                if (this.props.favorites[i].id === candidate.id) {
+                  load = false
+                }
+              }
+              if (load) {
+                this.props.addFavorites(candidate)
+              }
+            }
+          })
+        )
+      })
+    )
   }
 
   searchOnMedium = () => {
-      console.log('first')
+    console.log('first')
     this.props.RenderLoading(true)
     const URL =
       'https://pixabay.com/api/?key=' + API_KEY.pixabay_key + '&q=' + this.state.searchTerm
@@ -29,7 +59,11 @@ class SearchBar extends Component {
       .catch(error => {
         console.error(error)
       })
-      this.props.RenderLoading(false)
+    setTimeout(this.removeLoading, 500)
+  }
+
+  removeLoading() {
+    this.props.RenderLoading(false)
   }
 
   render() {
@@ -52,5 +86,5 @@ class SearchBar extends Component {
 
 export default connect(
   null,
-  { searchResults, RenderLoading }
+  { searchResults, RenderLoading, addFavorites }
 )(SearchBar)

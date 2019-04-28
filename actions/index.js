@@ -42,3 +42,21 @@ export function RenderLoading(loading) {
     loading
   }
 }
+
+export const LOAD_FROM_STORAGE = 'LOAD_FROM_STORAGE'
+
+export function LoadFromStorage(favorites) {
+  return {
+    type: LOAD_FROM_STORAGE,
+    favorites
+  }
+}
+
+export const ADD_FAVORITES = 'ADD_FAVORITES'
+
+export function addFavorites(favorites) {
+  return {
+    type: FAVORITE_IMAGES,
+    favorites
+  }
+}

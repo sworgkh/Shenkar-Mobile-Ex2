@@ -3,7 +3,7 @@ import Header from '../components/Header'
 import { connect } from 'react-redux'
 import { Dimensions, Image, StyleSheet, View, TouchableOpacity } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { FavoriteImages } from '../actions'
+import { FavoriteImages, addFavorites } from '../actions'
 
 const styles = StyleSheet.create({
   container: {
@@ -55,24 +55,36 @@ class OneImage extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({
-      item: this.props.item
-    })
+    console.log(this.props.favorites)
+    console.log(this.props.item)
 
-    this.setState({
-      icon_style: 'heart-o'
-    })
-    if (this.props.favorites.includes(this.props.item)) {
-      this.setState({
-        is_favorite: true,
-        icon_style: 'heart-o'
-      })
-    } else {
-      this.setState({
-        is_favorite: false,
-        icon_style: 'heart-o'
-      })
+    for (let i = 0; i < this.props.favorites.length; i++) {
+      if (this.props.favorites[i].id === this.props.item.id){
+        this.setState({
+          is_favorite: true,
+          icon_style: 'heart-o'
+        })
+      }
     }
+
+    // this.setState({
+    //     //   item: this.props.item
+    //     // })
+    //     //
+    //     // this.setState({
+    //     //   icon_style: 'heart-o'
+    //     // })
+    //     // if (this.props.favorites.includes(this.props.item)) {
+    //     //   this.setState({
+    //     //     is_favorite: true,
+    //     //     icon_style: 'heart-o'
+    //     //   })
+    //     // } else {
+    //     //   this.setState({
+    //     //     is_favorite: false,
+    //     //     icon_style: 'heart-o'
+    //     //   })
+    //     // }
   }
 
   eliminateHeart() {
@@ -86,7 +98,16 @@ class OneImage extends React.Component {
       icon_style: 'heart'
     })
     setTimeout(this.eliminateHeart, 500)
-    this.props.FavoriteImages(item)
+
+    let load = true
+    for (let i = 0; i < this.props.favorites.length; i++) {
+      if (this.props.favorites[i].id === this.props.item.id){
+        load = false
+      }
+    }
+    if (load) {
+      this.props.addFavorites(item)
+    }
   }
   render() {
     if (this.state.is_favorite) {
@@ -157,6 +178,6 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { FavoriteImages }
+  { FavoriteImages, addFavorites }
 )(OneImage)
 // export default OneImage

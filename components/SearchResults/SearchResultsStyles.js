@@ -15,5 +15,8 @@ module.exports = StyleSheet.create({
   pictureWithInfo: {
     margin: 10,
     backgroundColor: 'lightblue'
-  }
+  },
+  spinnerTextStyle: {
+    color: '#FFF'
+  },
 })
