@@ -11,8 +11,7 @@ describe('SearchBar', function() {
   })
 
   test('has placeholder', async () => {
-    //const testRenderer = renderer.create(<SearchBar />)
-    //console.log(testRenderer.root.findAllByType(TextInput))
-    //expect(testRenderer.root.findAllByType(TextInput).placeholder).toBe('Enter your search terms')
+    const testRenderer = renderer.create(<SearchBar />)
+    expect(testRenderer.root.findAllByType(TextInput).placeholder)
   })
 })
