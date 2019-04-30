@@ -4,6 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import API_KEY from '../../API/pixabay'
 import { connect } from 'react-redux'
 import { searchResults, RenderLoading, addFavorites } from '../../actions'
+import { PropTypes } from 'prop-types'
 
 const styles = require('./SearchBarStyles')
 
@@ -16,14 +17,13 @@ class SearchBar extends Component {
     this.removeLoading = this.removeLoading.bind(this)
   }
 
-  componentDidMount(): void {
-    console.log('load from storage')
+  componentDidMount() {
     AsyncStorage.getAllKeys().then(keys =>
       AsyncStorage.multiGet(keys).then(result => {
         result.map(req =>
           req.forEach(element => {
             const candidate = JSON.parse(element)
-            console.log(candidate)
+
             if (candidate.id) {
               if (!this.props.favorites) {
                 this.props.addFavorites(candidate)
@@ -45,12 +45,10 @@ class SearchBar extends Component {
     )
   }
 
-  searchOnMedium = () => {
-    console.log('first')
+  searchOnMedium() {
     this.props.RenderLoading(true)
     const URL =
       'https://pixabay.com/api/?key=' + API_KEY.pixabay_key + '&q=' + this.state.searchTerm
-    console.log(URL)
     fetch(URL)
       .then(response => response.json())
       .then(responseJson => {
@@ -82,6 +80,13 @@ class SearchBar extends Component {
       </View>
     )
   }
+}
+
+SearchBar.propTypes = {
+  favorites: PropTypes.array,
+  addFavorites: PropTypes.func,
+  searchResults: PropTypes.func,
+  RenderLoading: PropTypes.func
 }
 
 export default connect(

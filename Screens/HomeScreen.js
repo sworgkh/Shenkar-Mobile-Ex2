@@ -1,9 +1,10 @@
 import React from 'react'
-import { StyleSheet, View, Dimensions } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import SearchBar from '../components/SearchBar/SearchBar'
 import SearchResults from '../components/SearchResults/SearchResults'
 import Header from '../components/Header'
+import { PropTypes } from 'prop-types'
 
 const styles = StyleSheet.create({
   container: {
@@ -11,7 +12,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 3
-  }
+  },
+  searchBar: { margin: '1%' }
 })
 
 export default class App extends React.Component {
@@ -34,7 +36,7 @@ export default class App extends React.Component {
     }
   }
 
-  handleIndexChange = index => {
+  handleIndexChange(index) {
     this.setState({
       ...this.state,
       selectedIndex: index
@@ -55,11 +57,14 @@ export default class App extends React.Component {
           selectedIndex={this.state.selectedIndex}
           onTabPress={this.handleIndexChange}
         />
-        <View style={{ margin: '1%' }}>
+        <View style={styles.searchBar}>
           <SearchBar />
         </View>
         <SearchResults gridOrList={this.state.selectedIndex} navigation={this.props.navigation} />
       </View>
     )
   }
+}
+App.propTypes = {
+  navigation: PropTypes.object
 }

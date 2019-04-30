@@ -6,7 +6,7 @@ import {
   CLEAN_FAVORITE_IMAGES,
   LOADING,
   ADD_FAVORITES,
-  LOAD_FROM_STORAGE,
+  LOAD_FROM_STORAGE
 } from '../actions'
 import { AsyncStorage } from 'react-native'
 

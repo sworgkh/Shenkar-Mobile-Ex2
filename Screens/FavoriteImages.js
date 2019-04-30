@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 import { LoadFromStorage, OneImage, CleanFavoriteImages, addFavorites } from '../actions'
 import Header from '../components/Header'
 const styles = require('../components/SearchResults/SearchResultsStyles')
-// import { AsyncStorageModuleM } from '../components/AsyncStorageModule'
+import { PropTypes } from 'prop-types'
 
 class FavoriteImages extends React.Component {
   static navigationOptions = {
@@ -39,23 +39,6 @@ class FavoriteImages extends React.Component {
     this.cleanFavorites = this.cleanFavorites.bind(this)
   }
 
-  // componentDidMount(): void {
-  //   //   console.log('load from storage')
-  //   //   AsyncStorage.getAllKeys().then(keys =>
-  //   //     AsyncStorage.multiGet(keys).then(result => {
-  //   //       result.map(req =>
-  //   //         req.forEach(element => {
-  //   //           const candidate = JSON.parse(element)
-  //   //           console.log(candidate)
-  //   //           if (candidate.id && !this.props.favorites.includes(candidate)) {
-  //   //             this.props.addFavorites(candidate)
-  //   //           }
-  //   //         })
-  //   //       )
-  //   //     })
-  //   //   )
-  //   // }
-
   cleanFavorites() {
     Alert.alert(
       `Do you want to vote clean your favorites ?`,
@@ -71,7 +54,6 @@ class FavoriteImages extends React.Component {
                     try {
                       AsyncStorage.removeItem(element)
                     } catch (error) {
-                      // Error retrieving data
                       console.log(error.message)
                     }
                   })
@@ -84,7 +66,6 @@ class FavoriteImages extends React.Component {
         },
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'cancel'
         }
       ],
@@ -94,7 +75,12 @@ class FavoriteImages extends React.Component {
 
   _keyExtractor = item => item.id
 
-  render_item = ({ item }) => {
+  render_item({ item }) {
+    const imageStyle = {
+      margin: 2,
+      width: Dimensions.get('window').width / 3 - 5,
+      height: Dimensions.get('window').width / 3 - 5
+    }
     return (
       <TouchableOpacity
         onPress={() => {
@@ -103,11 +89,7 @@ class FavoriteImages extends React.Component {
         }}
       >
         <Image
-          style={{
-            margin: 2,
-            width: Dimensions.get('window').width / 3 - 5,
-            height: Dimensions.get('window').width / 3 - 5
-          }}
+          style={imageStyle}
           source={{
             uri: `${item.previewURL}`
           }}
@@ -148,6 +130,12 @@ function mapStateToProps(state) {
   }
 }
 
+FavoriteImages.propTypes = {
+  navigation: PropTypes.object,
+  OneImage: PropTypes.func,
+  CleanFavoriteImages: PropTypes.func,
+  favorites: PropTypes.object
+}
 export default connect(
   mapStateToProps,
   { OneImage, CleanFavoriteImages, LoadFromStorage, addFavorites }

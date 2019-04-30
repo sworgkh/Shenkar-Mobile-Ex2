@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Dimensions, Image, StyleSheet, View, TouchableOpacity } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { FavoriteImages, addFavorites } from '../actions'
+import { PropTypes } from 'prop-types'
 
 const styles = StyleSheet.create({
   container: {
@@ -55,36 +56,14 @@ class OneImage extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.favorites)
-    console.log(this.props.item)
-
     for (let i = 0; i < this.props.favorites.length; i++) {
-      if (this.props.favorites[i].id === this.props.item.id){
+      if (this.props.favorites[i].id === this.props.item.id) {
         this.setState({
           is_favorite: true,
           icon_style: 'heart-o'
         })
       }
     }
-
-    // this.setState({
-    //     //   item: this.props.item
-    //     // })
-    //     //
-    //     // this.setState({
-    //     //   icon_style: 'heart-o'
-    //     // })
-    //     // if (this.props.favorites.includes(this.props.item)) {
-    //     //   this.setState({
-    //     //     is_favorite: true,
-    //     //     icon_style: 'heart-o'
-    //     //   })
-    //     // } else {
-    //     //   this.setState({
-    //     //     is_favorite: false,
-    //     //     icon_style: 'heart-o'
-    //     //   })
-    //     // }
   }
 
   eliminateHeart() {
@@ -101,7 +80,7 @@ class OneImage extends React.Component {
 
     let load = true
     for (let i = 0; i < this.props.favorites.length; i++) {
-      if (this.props.favorites[i].id === this.props.item.id){
+      if (this.props.favorites[i].id === this.props.item.id) {
         load = false
       }
     }
@@ -110,6 +89,11 @@ class OneImage extends React.Component {
     }
   }
   render() {
+    const imageStyle = {
+      margin: 2,
+      width: Dimensions.get('window').width - 10,
+      height: Dimensions.get('window').width - 10
+    }
     if (this.state.is_favorite) {
       return (
         <View style={styles.container}>
@@ -119,11 +103,7 @@ class OneImage extends React.Component {
             iconName={this.state.menuIcon}
           />
           <Image
-            style={{
-              margin: 2,
-              width: Dimensions.get('window').width - 10,
-              height: Dimensions.get('window').width - 10
-            }}
+            style={imageStyle}
             source={{
               uri: `${this.props.item.largeImageURL}`
             }}
@@ -145,11 +125,7 @@ class OneImage extends React.Component {
           iconName={this.state.menuIcon}
         />
         <Image
-          style={{
-            margin: 2,
-            width: Dimensions.get('window').width - 10,
-            height: Dimensions.get('window').width - 10
-          }}
+          style={imageStyle}
           source={{
             uri: `${this.props.item.largeImageURL}`
           }}
@@ -158,7 +134,6 @@ class OneImage extends React.Component {
           style={styles.heart}
           onPress={() => {
             this.changeFavoritesState(this.props.item)
-            console.log(this.props.store)
           }}
         >
           <FontAwesome name={this.state.icon_style} size={100} color="#000" />
@@ -174,6 +149,13 @@ function mapStateToProps(state) {
     item: state.item,
     favorites: state.favorites
   }
+}
+
+OneImage.propTypes = {
+  favorites: PropTypes.array,
+  addFavorites: PropTypes.func,
+  item: PropTypes.object,
+  navigation: PropTypes.object
 }
 
 export default connect(

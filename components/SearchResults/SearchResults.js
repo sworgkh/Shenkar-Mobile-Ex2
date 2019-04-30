@@ -7,10 +7,11 @@ import {
   TouchableOpacity,
   View,
   Text,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native'
 import { connect } from 'react-redux'
 import { OneImage, RenderLoading, addFavorites } from '../../actions'
+import { PropTypes } from 'prop-types'
 const styles = require('./SearchResultsStyles')
 
 class SearchResults extends Component {
@@ -23,10 +24,15 @@ class SearchResults extends Component {
     this._keyExtractor = this._keyExtractor.bind(this)
   }
 
-
   _keyExtractor = item => item.id
 
-  render_item = ({ item }) => {
+  render_item({ item }) {
+    const imageStyle = {
+      margin: 2,
+      width: Dimensions.get('window').width / 3 - 5,
+      height: Dimensions.get('window').width / 3 - 5
+    }
+
     return (
       <TouchableOpacity
         onPress={() => {
@@ -35,11 +41,7 @@ class SearchResults extends Component {
         }}
       >
         <Image
-          style={{
-            margin: 2,
-            width: Dimensions.get('window').width / 3 - 5,
-            height: Dimensions.get('window').width / 3 - 5
-          }}
+          style={imageStyle}
           source={{
             uri: `${item.largeImageURL}`
           }}
@@ -60,7 +62,7 @@ class SearchResults extends Component {
       if (!this.props.results.length) {
         return (
           <ScrollView style={styles.searchResultsContainer}>
-            <Text style={{ margin: '5%', fontSize: 19 }}>No items found</Text>
+            <Text style={styles.notFoundMessage}>No items found</Text>
           </ScrollView>
         )
       }
@@ -80,24 +82,21 @@ class SearchResults extends Component {
     if (!this.props.results.length) {
       return (
         <ScrollView style={styles.searchResultsContainer}>
-          <Text style={{ margin: '5%', fontSize: 19 }}>No items found</Text>
+          <Text style={styles.notFoundMessage}>No items found</Text>
         </ScrollView>
       )
     }
-
+    const imageStyle = {
+      margin: 10,
+      width: Dimensions.get('window').width / 5 - 5,
+      height: Dimensions.get('window').width / 5 - 5
+    }
     return (
       <ScrollView style={styles.searchResultsContainer}>
         {this.props.results.map(item => {
           return (
             <View key={item.id} style={styles.pictureWithInfo}>
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                  margin: 10
-                }}
-              >
+              <View style={styles.pictureInfoInner}>
                 <TouchableOpacity
                   onPress={() => {
                     this.props.OneImage(item)
@@ -105,30 +104,17 @@ class SearchResults extends Component {
                   }}
                 >
                   <Image
-                    style={{
-                      margin: 10,
-                      width: Dimensions.get('window').width / 5 - 5,
-                      height: Dimensions.get('window').width / 5 - 5
-                    }}
+                    style={imageStyle}
                     source={{
                       uri: `${item.previewURL}`
                     }}
                   />
                 </TouchableOpacity>
-                <Text style={{ width: '50%', margin: '1%', fontSize: 19 }}>
-                  User who uploaded: {item.user}
-                </Text>
+                <Text style={styles.userInfo}>User who uploaded: {item.user}</Text>
               </View>
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  flexDirection: 'row',
-                  margin: 10
-                }}
-              >
-                <Text style={{ marginLeft: 10 }}>Views: {item.views}</Text>
-                <Text style={{ marginRight: '10%' }}>Likes: {item.likes}</Text>
+              <View style={styles.footer}>
+                <Text style={styles.views}>Views: {item.views}</Text>
+                <Text style={styles.likes}>Likes: {item.likes}</Text>
               </View>
             </View>
           )
@@ -147,6 +133,13 @@ function mapStateToProps(state) {
   }
 }
 
+SearchResults.propTypes = {
+  navigation: PropTypes.object,
+  OneImage: PropTypes.func,
+  loading: PropTypes.object,
+  results: PropTypes.object,
+  gridOrList: PropTypes.object
+}
 export default connect(
   mapStateToProps,
   { OneImage, RenderLoading, addFavorites }

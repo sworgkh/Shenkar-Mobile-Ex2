@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { PropTypes } from 'prop-types'
 
 const styles = StyleSheet.create({
   headerText: {
@@ -40,4 +41,8 @@ export default class Header extends React.Component {
       </View>
     )
   }
+}
+Header.propTypes = {
+  onPress: PropTypes.func,
+  iconName: PropTypes.string
 }
