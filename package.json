@@ -6,13 +6,13 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug"
-
   },
   "dependencies": {
     "eslint-config-react-native": "^4.0.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react-native": "^3.6.0",
     "prettier": "^1.17.0",
+    "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-native": "0.59.4",
     "react-native-elements": "^1.1.0",
